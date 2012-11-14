@@ -1,0 +1,138 @@
+:javascript
+  $(".navbar").hide("slow");
+
+  $(function(){
+    //$("#head").resizable().draggable();
+    //$("#body").resizable().draggable();
+    $("#head").hide();
+  });
+ 
+  var ws = new WebSocket("ws://onct-dsen.com:80");
+  var TWEET  = 0;
+  var HEAD   = 1;
+  var ALERT  = 3;
+  var BODY   = 4;
+  var DELETE = 5;
+
+  var CLOSE  = 1;
+  var OPEN   = 0;
+
+  var tweet = ""
+
+  ws.onmessage = function(e){
+    data = JSON.parse(e.data);
+    console.log(data.type);
+    if(data.type == TWEET)  {inst_tw(data);}
+    if(data.type == HEAD)   {inst_hd(data);}
+    if(data.type == ALERT)  {inst_al(ALERT, data.text);}
+    if(data.type == BODY)   {inst_bd(data);}
+    if(data.type == DELETE) {del_tw(data);}
+  };
+  ws.onclose = function(){
+    inst_al(CLOSE, "");
+  };
+  ws.onopen = function(){
+  };
+  function format(text) {
+    return text.replace(/(http:\/\/[\x21-\x7e]+)/gi,'<a href="$1" target="_blank">$1</a>')
+               .replace(/@([a-zA-Z0-9_]+)/gi,'<a href="http://twitter.com/$1" target="_blank">@$1</a>')
+               .replace(/#([a-zA-Z0-9_]+)/gi,'<a href="http://search.twitter.com/search?q=%23$1" target="_blank">#$1</a>');
+  }
+  function inst_al(status, msg) {
+    if(status == CLOSE){
+      msg = "サーバとの接続が切断されました。ページを更新してください。"
+    } else if(status == OPEN) {
+      msg = ""
+    } 
+    alert(msg)
+  }
+  function inst_tw(tweet) {
+    console.log(tweet);
+  
+    var data = tweet;
+    var user = data.user;
+    if (user) {
+      var id                = data.id;
+      var text              = data.text;
+      var screen_name       = user.screen_name;
+      var profile_image_url = user.profile_image_url;
+      var d                 = new Date(data.created_at);
+      var created_at_text   = d.getFullYear() + "/" + d.getMonth() + "/" + d.getDate()
+                            + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+    }
+    var div = $("<div/>")
+          .addClass("well")
+          .attr({id: "box"})
+          .attr({id: "tweet" + data.private_id })
+        .append($("<div/>")
+          .addClass("user")
+          .append($("<img/>")
+              .addClass("icon")
+              .attr({ src: profile_image_url, alt: screen_name}))
+          .append($("<span/>")
+              .addClass("screen_name")
+            .append($("<a/>")
+                .attr({ href: "http://twitter.com/" + screen_name + "/status/" + id, target: "_blank",  })
+                .text(screen_name))))
+        .append($("<div/>")
+          .addClass("text")
+          .append(format(text)));
+      $("#body").prepend(div.hide());
+      $(".well").slideDown("fast");
+      if($("#body div.box").size() >= 30) {
+        $("#body div.box:last").slideDown(100, function(){$(this).remove();});
+      }
+  }
+
+  function inst_hd(head) {
+    if(data.screen == 1){
+      $("#head .well").html("");
+      $("#head .well").html(data.html);
+      if($("#head .well").html() == ""){
+        $("#head").hide("slow");
+      } else {
+        $("#head").show("slow");
+      }
+    }
+  }
+
+  function inst_bd(data) {
+    var TIMER_ON  = 0;
+    var TIMER_OFF = 1;
+    if (data.bd == TIMER_ON){;}
+    if (data.bd == TIMER_OFF){;}
+  }
+
+  function del_tw(data) {
+    $("#"+data.id).slideDown(100, function(){$(this).remove();});
+  }
+  
+:css
+  .well{
+    overflow: hidden; 
+  }
+  .user{
+    float:left;
+    width: 120px;
+
+  }
+  .icon{
+    display: block; 
+    width: 50px;
+    high: 50px;
+  }
+  .screen_name{
+    
+    display: block; 
+  }
+  .text{
+    font-size: 160%;
+    overflow: hidden; 
+
+  }
+
+
+#screen
+  #head
+    .well
+  #body

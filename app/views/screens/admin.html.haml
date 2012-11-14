@@ -1,0 +1,53 @@
+:javascript
+  var ws = new WebSocket("ws://onct-dsen.com:80");
+
+  var TWEET  = 0;
+  var HEAD   = 1;
+  var ALERT  = 3;
+  var BODY   = 4
+  var DELETE = 5;
+
+  var CLOSE  = 1;
+  var OPEN   = 0;
+
+  var tweet = "";
+
+  ws.onmessage = function(e){
+    //data = JSON.parse(e.data);
+    //if(data.type == TWEET)   {inst_tw(data);}
+    //if(data.type == HEAD)  {inst_hd(data);}
+    //if(data.type == ALERT) {inst_al(ALERT, data.text);}
+    //if(data.type == BODY)  {inst_bd(data);}
+    //if(data.type == DELETE)  {del_tw(data);}
+  };
+  ws.onclose = function(){
+  };
+  ws.onopen = function(){
+  };
+
+  $(function(){
+    $("#main").click(function(){
+      var obj = {type:1, screen:0, html:$("#main_text").val()};
+      ws.send(JSON.stringify(obj));
+      $("#main_text").val("");
+    });
+
+    $("#sub").click(function(){
+      var obj = {type:1, screen:1, html:$("#sub_text").val()};
+      ws.send(JSON.stringify(obj));
+      $("#sub_text").val("");
+    });
+
+  });
+
+
+.span12
+  .mainScreenAct
+    %h2 MainScreen Message
+    %textarea.span12#main_text{:rows => "6"}
+    %a.btn.btn-primary.btn-block#main Update
+  .subScreenAct
+    %h2 SubScreen Message
+    %textarea.span12#sub_text{:rows => "6"}
+    %a.btn.btn-primary.btn-block#sub Update
+    

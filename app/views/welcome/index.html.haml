@@ -1,0 +1,9 @@
+.hero-unit
+  %h1 Welcome to Koryosai!
+  %p
+    Koryosaitter is SubScreen app and one of Twitter Client app on Koryosai.
+
+  - if signed_in?
+    = link_to "Go Home", client_path, :class => "btn btn-large btn-primary pull-right"
+  - else
+    =link_to "Signin with Twitter", "/auth/twitter", :class => "btn btn-large btn-primary pull-right"

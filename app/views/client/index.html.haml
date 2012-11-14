@@ -1,0 +1,167 @@
+:javascript
+  $(function(){
+    if($(".form#tweetForm").is("*")){
+      var max = 140;
+      var count = $(".form#tweetForm").val().length;
+      $("#tweetCount").text(max - count);
+      $(".form#tweetForm").bind("change keyup", function(){
+        count = $(this).val().length;
+        count  = max - count;
+        $("#tweetCount").text(count);
+      });
+      $("#tweetSend").bind("click", function(){
+          var data = {tweet: $(".form#tweetForm").val()}
+          $.ajax({
+            type: "POST",
+            url: "/client/tweet",
+            data: data,
+            success: function(res) {
+              var alert = $("<div />")
+                .addClass("alert alert-success")
+                .append($("<button />")
+                  .addClass("close")
+                  .attr({type:"button", "data-dismiss" : "alert"})
+                  .text("x"))
+                .append($("<h4 />")
+                  .text("Tweeted!"));
+              $("#tweetCount").text(130);
+
+              $(".row").prepend(alert);
+              $(".form#tweetForm").val(" #koryosai");
+            }
+          });
+
+      });
+      $("ul.dropdown-menu li a").bind("click", function(){
+        console.log($(this));
+        loc = " (at " + $(this).attr("loc") + ")";
+        alert(loc);
+        loc += $(".form#tweetForm").val();
+        $(".form#tweetForm").val(loc);        
+      });
+
+    }
+  });
+
+:css
+  .userinfo img{
+    float: left;
+    margin: 10px;
+  }
+
+  .userinfo .icon{
+    width: 50%;
+  }
+
+  #screenname {
+    float: left;
+    padding: 15px;
+  }
+
+  .tweet {
+    clear: both;
+  }
+
+  .tweetCount{
+    padding: 1px;
+  }  
+
+  .tweetSend {
+    padding: 1px;
+
+  }
+
+  #4sq {
+    padding: 1px;
+    clear: both;
+  }
+
+.span12
+  #content
+    .hero-unit
+      .userinfo
+        .icon
+          =image_tag current_user.icon
+        .screenname
+          %p#screenname
+            @
+            =link_to( current_user.screenname, "http://twitter.com/#{current_user.screenname}")
+      
+      .tweet
+        .form-actions
+          %span.badge.pull-right#tweetCount 140
+          %textarea#tweetForm.form.span6.pull-left{:rows => "3"} &nbsp;#koryosai
+        .form-actions
+          .btn-group.pull-left
+            %a.btn.btn-large.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+              %i.icon-map-marker
+              Location
+              %span.caret
+            %ul.dropdown-menu
+              %li
+                %a{:loc => "小山工業高等専門学校"}
+                  小山工業高等専門学校
+              %li
+                %a{:loc => "小山高専 2年電子科のHR"}
+                  小山高専 2年電子科のHR
+              %li
+                %a{:loc => "小山高専 電子工学実験室"}
+                  小山高専 電子工学実験室
+              %li
+                %a{:loc => "小山高専 物質工学科棟"}
+                  小山高専 物質工学科棟
+              %li
+                %a{:loc => "小山高専 武道館"}
+                  小山高専 武道館
+              %li
+                %a{:loc => "小山高専 図書情報センター"}
+                  小山高専 図書情報センター
+              %li
+                %a{:loc => "小山高専 第1情報ネットワーク研究室"}
+                  小山高専 第1情報ネットワーク研究室
+              %li
+                %a{:loc => "小山高専 エレクトロニクス研究部"}
+                  小山高専 エレクトロニクス研究部
+              %li
+                %a{:loc => "小山高専 3年電子科のHR"}
+                  小山高専 3年電子科のHR
+              %li
+                %a{:loc => "小山高専 バイオメカ研究室"}
+                  小山高専 バイオメカ研究室
+              %li
+                %a{:loc => "小山高専 青嵐寮"}
+                  小山高専 青嵐寮
+              %li
+                %a{:loc => "小山高専 合宿所"}
+                  小山高専 合宿所
+              %li
+                %a{:loc => "小山高専 講義棟"}
+                  小山高専 講義棟
+              %li
+                %a{:loc => "小山高専 物質工学科実験棟"}
+                  小山高専 物質工学科実験棟
+              %li
+                %a{:loc => "小山高専 学生会室"}
+                  小山高専 学生会室
+              %li
+                %a{:loc => "小山高専 制御動力研究室"}
+                  小山高専 制御動力研究室
+              %li
+                %a{:loc => "小山高専 電子制御工学科棟"}
+                  小山高専 電子制御工学科棟
+
+
+          %a.btn.btn-success.btn-large#tweetSend.pull-right
+            %i.icon-bullhorn
+            Tweet
+
+          -#           #4sq
+          -#             %select
+          -#               %option 1
+          -#               %option 2
+          -#               %option 3
+          -#               %option 4
+          -#               %option 5
+        %a.btn.btn-large.btn-block.btn-primary.disable TimeLine
+
+      -#%a.btn#favtest fav

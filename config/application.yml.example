@@ -1,0 +1,11 @@
+development:
+  twitter_key: "3oRa3GW2rK3vOE9PFOYZHw"
+  twitter_secret: "BYdlH3hkW90sQMUAUyw0OVVZFwL8ozcaYbirNDryLU"
+
+test:
+  twitter_key: ""
+  twitter_secret: ""
+
+production:
+  twitter_key: "ndAxCESRD1oW3T4eSPuGsg"
+  twitter_secret: "9eubbqNeCpHh5yHX35ATLKxSPgaUCKa80xEoj1At20"
